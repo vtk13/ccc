@@ -9,7 +9,6 @@
 <div class="row form-goods-search">
     <div class="col-xs-12">
         <form class="form-inline form-search">
-            {% csrf_token %}
             <div class="form-group">
                 <input class="form-control" name="q" value="{{ q }}" placeholder="Поиск по штрихкоду или названию">
             </div>
@@ -27,7 +26,8 @@
                 <div class="list-group-item clearfix">
                     <form action="/sales/add" method="post" class="pull-right">
                         {% csrf_token %}
-                        <input type="hidden" name="good_id" value="{{ good.id }}">
+                        <input type="hidden" name="good" value="{{ good.id }}">
+                        <input type="hidden" name="amount" value="1">
                         <button class="btn btn-success" type="submit">Купил сегодня</button>
                     </form>
                     <span class="text-muted small">{{ good.bar_code }}</span> {{ good.title }}
@@ -40,6 +40,7 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <input type="hidden" name="bar_code" value="{{ q }}">
+                    <input type="hidden" name="pack_volume" value="1">
                     <button class="btn btn-success" type="submit">Добавить товар со штрихкодом {{ q }}</button>
                 </div>
             </form>

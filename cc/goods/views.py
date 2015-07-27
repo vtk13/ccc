@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.forms import Form
+from django.db.models import Q
 
 from .models import Good, Shop, Unit, Cost
 from .forms import ShopForm, GoodForm, SaleForm
@@ -99,10 +100,15 @@ class CostAdd(AddForm):
 
 
 def index(request):
-    # latest_question_list = Good.objects.order_by('-pub_date')[:5]
+    q = request.GET.get('q', '')
+    if len(q) > 0:
+        goods = Good.objects.filter(Q(bar_code__contains=q) | Q(title__contains=q))
+    else:
+        goods = []
     template = loader.get_template('index/index.html')
     context = RequestContext(request, {
-        # 'latest_question_list': latest_question_list,
+        'q': q,
+        'goods': goods,
     })
     return HttpResponse(template.render(context))
 
