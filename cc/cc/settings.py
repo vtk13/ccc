@@ -88,6 +88,8 @@ DEFAULT_CHARSET = 'UTF-8'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
+STATIC_ROOT = '/var/www/ccc/static/'
+
 STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/'

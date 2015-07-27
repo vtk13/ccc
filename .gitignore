@@ -2,3 +2,4 @@
 __pycache__
 /cc/goods/static/assets/
 /bower_components/
+/static/
