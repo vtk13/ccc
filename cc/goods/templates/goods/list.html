@@ -1,0 +1,14 @@
+{% extends "site.layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <h3>Просмотр товаров</h3>
+        <ul class="list-group">
+            {% for good in goods %}
+                <li class="list-group-item">{{ good.bar_code }} <a href="/goods/view/{{ good.id }}">{{ good.title }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

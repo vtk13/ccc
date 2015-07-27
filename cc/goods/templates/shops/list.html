@@ -1,0 +1,14 @@
+{% extends "site.layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <h3>Просмотр магазинов</h3>
+        <ul class="list-group">
+            {% for shop in shops %}
+                <li class="list-group-item">{{ shop.address_id }} {{ shop.title }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

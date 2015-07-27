@@ -1,0 +1,6 @@
+apache / postgresql
+
+bower?
+
+pip install psycopg2
+pip install django-bootstrap-form

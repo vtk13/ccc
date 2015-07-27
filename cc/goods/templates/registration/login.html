@@ -1,0 +1,38 @@
+{% extends "site.layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        {% if form.errors %}
+        <p>Неверный логин или пароль, пожалуйста попробуйте еще раз</p>
+        {% endif %}
+
+        {% if next %}
+            {% if user.is_authenticated %}
+            <p>У вас недостаточно прав чтобы открыть эту страницу.</p>
+            {% else %}
+            <p>Пожалуйста авторизуйтесь, чтобы продолжить.</p>
+            {% endif %}
+        {% endif %}
+
+        <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label_tag }}</label>
+                <input class="form-control" id="{{ form.username.id_for_label }}" name="{{ form.username.html_name }}" type="text" />
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">{{ form.password.label_tag }}</label>
+                <input class="form-control" id="{{ form.password.id_for_label }}" name="{{ form.password.html_name }}" type="password" />
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="login" />
+                <input type="hidden" name="next" value="{{ next }}" />
+            </div>
+        </form>
+
+        {# Assumes you setup the password_reset view in your URLconf #}
+        <p><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+    </div>
+</div>
+{% endblock %}

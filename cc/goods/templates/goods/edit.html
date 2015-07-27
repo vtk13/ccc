@@ -1,0 +1,51 @@
+{% extends "site.layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <h3>Редактировать продукт</h3>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>Группа</label>
+                <select class="form-control" name="parent_id">
+                    {% for parent in parents %}
+                        <option {% if parent.selected %}selected{% endif %} value="{{ parent.id }}">{{ parent.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Штрих-код</label>
+                <input class="form-control" name="bar_code" value="{{ good.bar_code }}">
+            </div>
+            <div class="form-group">
+                <label>Название</label>
+                <input class="form-control" name="title" value="{{ good.title }}">
+            </div>
+            <div class="form-group">
+                <label>Продается ли товар в фиксированной упаковке?</label>
+                <select class="form-control" name="packed">
+                    <option {% if good.packed == 0 %}selected{% endif %} value="0">Нет, товар продает на разновес либо в упаковках с разным весом</option>
+                    <option {% if good.packed == 1 %}selected{% endif %} value="1">Да, товар продается фиксирванными упаковками</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Единица измерения</label>
+                <select class="form-control" name="unit">
+                    {% for unit in units %}
+                        <option {% if unit.id == good.unit %}selected{% endif %} value="{{ unit.id }}">{{ unit.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Количество в упаковке</label>
+                <input class="form-control" name="pack_volume" value="{{ good.pack_volume }}">
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="id" value="{{ good.id }}">
+                <button class="btn btn-success">Сохранить</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

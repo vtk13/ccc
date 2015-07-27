@@ -1,0 +1,27 @@
+.list-group-item.bg-success {
+    background: #dff0d8;
+}
+
+form.pull-right {
+    margin-left: 10px;
+}
+
+h1 {
+    font-size: 20px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+.typeahead {
+    z-index: 1051;
+}
+
+.form-search .form-control {
+    width: 500px;
+}
+
+.row.form-goods-search {
+    margin-bottom: 15px;
+}
+.row.userMessages p.bg-info {
+    padding: 10px;
+}

@@ -1,0 +1,14 @@
+{% extends "site.layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <h3>Мои покупки</h3>
+        <ul class="list-group">
+            {% for sale in sales %}
+                <li class="list-group-item">{{ sale.good.title }} {{ sale.timestamp|date }} {{ sale.cost }}/{{ sale.amount }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

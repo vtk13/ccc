@@ -1,0 +1,37 @@
+{% extends "site.layout.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <div>
+            {% for parent in parents %}
+                <a href="/goods/view/{{ parent.id }}">{{ parent.title }}</a> /
+            {% endfor %}
+        </div>
+        <h3>{{ good.title }} <a class="pull-right" href="/goods/edit/{{ good.id }}"><span class="glyphicon glyphicon-edit"></span></a></h3>
+        <div class="row">
+            <div class="col-xs-8">
+                {{ good.bar_code }}
+                <ul class="list-group">
+                    {% for child in children %}
+                        <li class="list-group-item">{{ child.bar_code }} <a href="/goods/view/{{ child.id }}">{{ child.title }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-xs-4">
+                <div class="list-group">
+                {% for cost in costs %}
+                    <div class="list-group-item">
+                        {% if good.packed %}{{ cost.pack_cost }}р/уп{% endif %}
+                        {{ cost.unit_cost }}р/{{ good.unit.title }}
+                        {{ cost.title }}
+                        <span title="{{ cost.timestamp|date }}" class="pull-right glyphicon glyphicon-time"></span>
+
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
