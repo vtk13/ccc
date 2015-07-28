@@ -1,45 +1,33 @@
-from django.forms import Form, CharField, BooleanField, ChoiceField, DecimalField
-from .models import Unit, Good, Shop
+from django.forms import ModelForm, CharField, BooleanField, DecimalField, ModelChoiceField
+from .models import Unit, Good, Shop, Cost
 
-def num(s):
-    try:
-        return int(s)
-    except ValueError:
-        return 0
+class ShopForm(ModelForm):
+    class Meta:
+        model = Shop
 
-class ShopForm(Form):
     address = CharField(label='Адрес')
     title = CharField(label='Название')
 
 
-class GoodForm(Form):
+class GoodForm(ModelForm):
+    class Meta:
+        model = Good
+
     bar_code = CharField(label='Штрих-код', required=False)
     title = CharField(label='Название')
-    parent = ChoiceField(label='Группа', required=False)
+    parent = ModelChoiceField(queryset=Good.objects.all(), label='Группа', required=False)
     packed = BooleanField(label='Продается ли товар в фиксированной упаковке?', required=False)
-    unit = ChoiceField(
-        label='Единица измерения',
-        choices=[(o.id, o.title) for o in Unit.objects.all()]
-    )
+    unit = ModelChoiceField(queryset=Unit.objects.all(), label='Единица измерения')
     pack_volume = DecimalField(label='Количество в упаковке', decimal_places=3, max_digits=10)
 
 
-class SaleForm(Form):
-    good = ChoiceField(label='Продукт')
-    shop = ChoiceField(label='Магазин')
+class SaleForm(ModelForm):
+    class Meta:
+        model = Cost
+        fields = ['good', 'shop', 'cost', 'discount', 'amount']
+
+    good = ModelChoiceField(queryset=Good.objects.all(), label='Продукт')
+    shop = ModelChoiceField(queryset=Shop.objects.all(), label='Магазин')
     cost = DecimalField(label='Цена', max_digits=10, decimal_places=2)
     discount = BooleanField(label='Цена по акции', required=False)
     amount = DecimalField(label='Количество', max_digits=10, decimal_places=3)
-
-    def full_clean(self):
-        good_id = num(self.data.get('good', 0))
-        if good_id > 0:
-            good = Good.objects.get(pk=good_id)
-            self.fields['good'].choices = [(good.id, good.title)]
-
-        shop_id = num(self.data.get('shop', 0))
-        if shop_id > 0:
-            shop = Shop.objects.get(pk=shop_id)
-            self.fields['shop'].choices = [(shop.id, shop.title)]
-
-        return super(Form, self).full_clean()

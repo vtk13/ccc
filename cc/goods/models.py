@@ -61,6 +61,9 @@ class Good(models.Model):
             res += self._traverse_costs(child, callback)
         return res
 
+    def get_absolute_url(self):
+        return '/goods/view/%i' % self.id
+
     def __str__(self):
         return self.title
 

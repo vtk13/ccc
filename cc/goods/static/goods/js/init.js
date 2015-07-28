@@ -23,9 +23,9 @@ require(['jquery', 'bootstrap', 'selectize'], function($, bs) {
     $('select[name=good]').add('select[name=parent]').selectize({
         valueField: 'id',
         labelField: 'title',
-        searchField: 'search_field',
+        searchField: ['bar_code', 'title'],
         options: [],
-        create: true,
+        create: false,
         load: function(query, callback) {
             $.ajax({
                 url: '/ajax/goods/' + encodeURIComponent(query),
