@@ -30,7 +30,8 @@
                         <input type="hidden" name="amount" value="1">
                         <button class="btn btn-success" type="submit">Купил сегодня</button>
                     </form>
-                    <span class="text-muted small">{{ good.bar_code }}</span> {{ good.title }}
+                    <span class="text-muted small">{{ good.bar_code }}</span>
+                    <a href="{% url 'goods_view' good.id %}">{{ good.title }}</a>
                 </div>
             {% endfor %}
             </div>

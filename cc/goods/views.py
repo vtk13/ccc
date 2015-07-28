@@ -44,6 +44,29 @@ class AddForm(LoginRequiredMixin, TemplateView):
     def process_cleaned_data(self, form, request):
         pass
 
+class EditForm(LoginRequiredMixin, TemplateView):
+    template_name = ""
+    form_class = Form
+    ok_url = ""
+
+    def get(self, request, *args, **kwargs):
+        model = self.get_model(int(kwargs.get('id', 0)))
+        form = self.form_class(initial=model)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            self.process_cleaned_data(form, request)
+            return HttpResponseRedirect(self.ok_url)
+
+        return render(request, self.template_name, {'form': form})
+
+    def process_cleaned_data(self, form, request):
+        pass
+
+    def get_model(self, id):
+        pass
 
 class ShopAdd(AddForm):
     template_name = "shops/add.html"
@@ -62,6 +85,23 @@ class GoodAdd(AddForm):
     initial = {
         'pack_volume': 1,
     }
+    form_class = GoodForm
+    ok_url = "/goods/list"
+
+    def process_cleaned_data(self, form, request):
+        data = form.cleaned_data
+        good = Good(
+            bar_code=data['bar_code'],
+            title=data['title'],
+            parent=empty2none(data['parent']),
+            packed=data['packed'],
+            unit=Unit.objects.get(pk=data['unit']),
+            pack_volume=data['pack_volume']
+        )
+        good.save()
+
+class GoodEdit(EditForm):
+    template_name = "goods/edit.html"
     form_class = GoodForm
     ok_url = "/goods/list"
 
@@ -122,9 +162,13 @@ def goods_list(request):
 
 def goods_view(request, good_id):
     good = Good.objects.get(pk=good_id)
+    children = Good.objects.filter(parent=good)
     template = loader.get_template('goods/view.html')
     context = RequestContext(request, {
         'good': good,
+        'children': children,
+        'costs': good.list_costs(),
+        'parents': good.list_parents(),
     })
     return HttpResponse(template.render(context))
 
