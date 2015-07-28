@@ -27,7 +27,7 @@ class Good(models.Model):
         res = []
         good = self
         while good.parent:
-            res.append(good.parent)
+            res.insert(0, good.parent)
             good = good.parent
         return res
 
