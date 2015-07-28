@@ -19,3 +19,5 @@ cp bower_components/selectize/dist/js/standalone/selectize.min.js cc/goods/stati
 cp bower_components/selectize/dist/css/* cc/goods/static/assets/selectize/
 mkdir cc/goods/static/assets/bootstrap
 cp -r bower_components/bootstrap/dist/* cc/goods/static/assets/bootstrap
+
+/etc/init.d/apache2 restart
