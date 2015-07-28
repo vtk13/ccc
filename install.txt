@@ -5,5 +5,6 @@ bower?
 pip install psycopg2
 pip install django-bootstrap-form
 pip install django-registration-redux
+pip install Pillow
 
 pip install mysql-connector-python --allow-external mysql-connector-python

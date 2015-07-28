@@ -20,4 +20,6 @@ cp bower_components/selectize/dist/css/* cc/goods/static/assets/selectize/
 mkdir cc/goods/static/assets/bootstrap
 cp -r bower_components/bootstrap/dist/* cc/goods/static/assets/bootstrap
 
+chmod 777 media/good_images
+
 /etc/init.d/apache2 restart

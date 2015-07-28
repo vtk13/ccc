@@ -14,6 +14,9 @@
         <div class="row">
             <div class="col-xs-8">
                 {{ good.bar_code }}
+                {% for image in images %}
+                    <img src="{{ image.image.url }}" height="100">
+                {% endfor %}
                 <ul class="list-group">
                     {% for child in children %}
                         <li class="list-group-item">{{ child.bar_code }} <a href="/goods/view/{{ child.id }}">{{ child.title }}</a></li>

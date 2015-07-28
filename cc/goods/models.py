@@ -1,6 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 import decimal
+import uuid
+import os
+
+def get_file_path(instance, filename):
+    ext = filename.split('.')[-1]
+    filename = "%s.%s" % (uuid.uuid4(), ext)
+    return os.path.join('good_images', filename)
 
 class Unit(models.Model):
     title = models.CharField(max_length=200)
@@ -66,6 +73,10 @@ class Good(models.Model):
 
     def __str__(self):
         return self.title
+
+class GoodImage(models.Model):
+    image = models.ImageField(upload_to=get_file_path)
+    good = models.ForeignKey(Good)
 
 class Cost(models.Model):
     good = models.ForeignKey(Good)
