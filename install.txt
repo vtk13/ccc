@@ -8,3 +8,6 @@ pip install django-registration-redux
 pip install Pillow
 
 pip install mysql-connector-python --allow-external mysql-connector-python
+
+
+ssh vtkd 'pg_dump -Upostgres --clean ccc' | psql -Upostgres ccc

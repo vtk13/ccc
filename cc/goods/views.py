@@ -52,7 +52,7 @@ class CostAdd(LoginRequiredMixin, CreateView):
 def index(request):
     q = request.GET.get('q', '')
     if len(q) > 0:
-        goods = Good.objects.filter(Q(bar_code__contains=q) | Q(title__contains=q))
+        goods = Good.objects.filter(Q(bar_code__icontains=q) | Q(title__icontains=q))
     else:
         goods = []
     template = loader.get_template('index/index.html')
@@ -92,8 +92,9 @@ def shops_list(request):
     })
     return HttpResponse(template.render(context))
 
+@login_required
 def sales_list(request):
-    costs = Cost.objects.all()
+    costs = Cost.objects.filter(user=request.user).order_by('-timestamp')
     template = loader.get_template('sales/list.html')
     context = RequestContext(request, {
         'sales': costs,

@@ -6,7 +6,11 @@
         <h3>Мои покупки</h3>
         <ul class="list-group">
             {% for sale in sales %}
-                <li class="list-group-item">{{ sale.good.title }} {{ sale.timestamp|date }} {{ sale.cost }}/{{ sale.amount }}</li>
+                <li class="list-group-item">
+                    <span class="text-muted small">{{ sale.timestamp|date }}</span>
+                    <a href="{% url 'goods_view' sale.good.id %}">{{ sale.good.title }}</a>
+                    {{ sale.cost }}/{{ sale.amount }}
+                </li>
             {% endfor %}
         </ul>
     </div>
