@@ -72,6 +72,10 @@ def goods_list(request):
 
 def goods_view(request, good_id):
     good = Good.objects.get(pk=good_id)
+    _min, _max = good.min_max_cost()
+    good.min = _min
+    good.max = _max
+
     images = GoodImage.objects.filter(good=good)
     template = loader.get_template('goods/view.html')
     context = RequestContext(request, {

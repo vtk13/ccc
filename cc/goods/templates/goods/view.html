@@ -18,6 +18,20 @@
                     <img src="{{ image.image.url }}" height="100">
                 {% endfor %}
 
+                <div>
+                    Минимальная цена:
+                    {{ good.min.shop.title }}
+                    {% if good.packed %}{{ good.min.pack_cost_str }}р/уп{% endif %}
+                    {{ good.min.unit_cost_str }}р/{{ good.unit.title }}
+                </div>
+
+                <div>
+                    Максимальная цена:
+                    {{ good.max.shop.title }}
+                    {% if good.packed %}{{ good.max.pack_cost_str }}р/уп{% endif %}
+                    {{ good.max.unit_cost_str }}р/{{ good.unit.title }}
+                </div>
+
                 {% if children %}
                     <ul class="list-group">
                     {% for child in children %}
