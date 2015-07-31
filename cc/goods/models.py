@@ -39,31 +39,40 @@ class Good(models.Model):
         return res
 
     def list_costs(self):
-        if self.packed:
-            def cb(cost):
-                try:
-                    cost.pack_cost = "%.2f" % (cost.cost/cost.amount)
-                except decimal.DivisionByZero:
-                    cost.pack_cost = 'n/a'
+        return self._traverse_costs(self)
 
-                try:
-                    cost.unit_cost = "%.2f" % (cost.cost/cost.amount/cost.good.pack_volume)
-                except decimal.DivisionByZero:
-                    cost.unit_cost = 'n/a'
-                return cost
-        else:
-            def cb(cost):
-                try:
-                    cost.unit_cost = "%.2f" % (cost.cost/cost.amount/cost.good.pack_volume)
-                except decimal.DivisionByZero:
-                    cost.unit_cost = 'n/a'
-                return cost
-        return self._traverse_costs(self, cb)
+    def min_max_cost(self):
+        _min = None
+        _max = None
 
-    def _traverse_costs(self, good, callback):
+        def cb(cost):
+            nonlocal _min, _max
+            try:
+                if _min is None or cost.unit_cost() < _min.unit_cost():
+                    _min = cost
+                if _max is None or cost.unit_cost() > _max.unit_cost():
+                    _max = cost
+            except:
+                pass
+
+        self._traverse_costs(self, cb)
+        return _min, _max
+
+    def list_children(self):
+        children = Good.objects.filter(parent=self)
+        for child in children:
+            _min, _max = child.min_max_cost()
+            child.min = _min
+            child.max = _max
+        return children
+
+    def _traverse_costs(self, good, callback=None):
         res = []
         for cost in Cost.objects.filter(good=good):
-            res.append(callback(cost))
+            if callback is None:
+                res.append(cost)
+            else:
+                res.append(callback(cost))
         for child in Good.objects.filter(parent=good):
             res += self._traverse_costs(child, callback)
         return res
@@ -86,6 +95,24 @@ class Cost(models.Model):
     cost = models.DecimalField(max_digits=10, decimal_places=2)
     amount = models.DecimalField(max_digits=10, decimal_places=3)
     discount = models.BooleanField(default=False)
+
+    def unit_cost(self):
+        return self.cost/self.amount/self.good.pack_volume
+
+    def unit_cost_str(self):
+        try:
+            return "%.2f" % (self.unit_cost())
+        except decimal.DivisionByZero:
+            return 'n/a'
+
+    def pack_cost(self):
+        return self.cost/self.amount
+
+    def pack_cost_str(self):
+        try:
+            return "%.2f" % (self.pack_cost())
+        except decimal.DivisionByZero:
+            return 'n/a'
 
     def __str__(self):
         return self.good.title + ', ' + self.shop.title + ', ' + str(self.cost)

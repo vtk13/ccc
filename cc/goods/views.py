@@ -72,13 +72,12 @@ def goods_list(request):
 
 def goods_view(request, good_id):
     good = Good.objects.get(pk=good_id)
-    children = Good.objects.filter(parent=good)
     images = GoodImage.objects.filter(good=good)
     template = loader.get_template('goods/view.html')
     context = RequestContext(request, {
         'good': good,
         'images': images,
-        'children': children,
+        'children': good.list_children(),
         'costs': good.list_costs(),
         'parents': good.list_parents(),
     })

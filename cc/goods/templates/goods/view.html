@@ -10,30 +10,49 @@
                 <a href="/goods/view/{{ parent.id }}">{{ parent.title }}</a> /
             {% endfor %}
         </div>
-        <h3>{{ good.title }} <a class="pull-right" href="/goods/edit/{{ good.id }}"><span class="glyphicon glyphicon-edit"></span></a></h3>
+        <h1>{{ good.title }} <a class="pull-right" href="/goods/edit/{{ good.id }}"><span class="glyphicon glyphicon-edit"></span></a></h1>
         <div class="row">
-            <div class="col-xs-8">
+            <div class="col-xs-12">
                 {{ good.bar_code }}
                 {% for image in images %}
                     <img src="{{ image.image.url }}" height="100">
                 {% endfor %}
-                <ul class="list-group">
+
+                {% if children %}
+                    <ul class="list-group">
                     {% for child in children %}
-                        <li class="list-group-item">{{ child.bar_code }} <a href="/goods/view/{{ child.id }}">{{ child.title }}</a></li>
+                        <li class="list-group-item">
+                            {{ child.bar_code }} <a href="/goods/view/{{ child.id }}">{{ child.title }}</a>
+
+                            <div>
+                                Минимальная цена:
+                                {{ child.min.shop.title }}
+                                {% if child.packed %}{{ child.min.pack_cost_str }}р/уп{% endif %}
+                                {{ child.min.unit_cost_str }}р/{{ child.unit.title }}
+                            </div>
+
+                            <div>
+                                Максимальная цена:
+                                {{ child.max.shop.title }}
+                                {% if child.packed %}{{ child.max.pack_cost_str }}р/уп{% endif %}
+                                {{ child.max.unit_cost_str }}р/{{ child.unit.title }}
+                            </div>
+                        </li>
                     {% endfor %}
-                </ul>
-            </div>
-            <div class="col-xs-4">
-                <div class="list-group">
-                {% for cost in costs %}
-                    <div class="list-group-item">
-                        {{ cost.shop.title }}
-                        {% if good.packed %}{{ cost.pack_cost }}р/уп{% endif %}
-                        {{ cost.unit_cost }}р/{{ good.unit.title }}
-                        <span title="{{ cost.timestamp|date }}" class="pull-right glyphicon glyphicon-time"></span>
+                    </ul>
+                {% else %}
+                    <h2>Цены</h2>
+                    <div class="list-group">
+                    {% for cost in costs %}
+                        <div class="list-group-item">
+                            {{ cost.shop.title }}
+                            {% if good.packed %}{{ cost.pack_cost_str }}р/уп{% endif %}
+                            {{ cost.unit_cost_str }}р/{{ good.unit.title }}
+                            <span title="{{ cost.timestamp|date }}" class="pull-right glyphicon glyphicon-time"></span>
+                        </div>
+                    {% endfor %}
                     </div>
-                {% endfor %}
-                </div>
+                {% endif %}
             </div>
         </div>
     </div>

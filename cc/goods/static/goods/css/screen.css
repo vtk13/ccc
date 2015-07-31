@@ -7,9 +7,15 @@ form.pull-right {
 }
 
 h1 {
-    font-size: 20px;
+    font-size: 28px;
     margin-top: 5px;
     margin-bottom: 20px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 20px;
 }
 .typeahead {
     z-index: 1051;
