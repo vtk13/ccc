@@ -23,11 +23,6 @@
         <h1>{{ good.title }}</h1>
         <div class="row">
             <div class="col-xs-6">
-                {% for image in images %}
-                    <img class="img-thumbnail" src="{{ image.image.url }}">
-                {% endfor %}
-            </div>
-            <div class="col-xs-6">
                 {{ good.bar_code }}<br>
 
                 {% if good.min %}
@@ -41,6 +36,11 @@
                         {% if good.packed %}{{ good.max.pack_cost_str }}р/уп{% endif %}</a>
                     {{ good.max.shop.title }}
                 {% endif %}
+            </div>
+            <div class="col-xs-6">
+                {% for image in images %}
+                    <img class="img-thumbnail" src="{{ image.image.url }}">
+                {% endfor %}
             </div>
         </div>
         <div class="row">
