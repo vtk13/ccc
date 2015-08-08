@@ -31,6 +31,9 @@ h3 {
 .row.userMessages p.bg-info {
     padding: 10px;
 }
+.good-images {
+    text-align: right;
+}
 .good-images .img-thumbnail {
-    height: 100px;
+    height: 300px;
 }
