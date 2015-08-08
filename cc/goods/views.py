@@ -70,7 +70,7 @@ def goods_list(request):
     })
     return HttpResponse(template.render(context))
 
-def goods_view(request, good_id):
+def good_view(request, good_id):
     good = Good.objects.get(pk=good_id)
     _min, _max = good.min_max_cost()
     good.min = _min
@@ -84,15 +84,6 @@ def goods_view(request, good_id):
         'children': good.list_children(),
         'costs': good.list_costs(),
         'parents': good.list_parents(),
-    })
-    return HttpResponse(template.render(context))
-
-def cost_view(request, cost_id):
-    cost = Cost.objects.get(pk=cost_id)
-
-    template = loader.get_template('costs/view.html')
-    context = RequestContext(request, {
-        'cost': cost
     })
     return HttpResponse(template.render(context))
 

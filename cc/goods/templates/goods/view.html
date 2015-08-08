@@ -22,28 +22,29 @@
         <a class="pull-right" href="/goods/edit/{{ good.id }}"><span class="glyphicon glyphicon-edit"></span></a>
         <h1>{{ good.title }}</h1>
         <div class="row">
-            <div class="col-xs-12">
-                {{ good.bar_code }}
+            <div class="col-xs-6">
                 {% for image in images %}
-                    <img src="{{ image.image.url }}" height="100">
+                    <img class="img-thumbnail" src="{{ image.image.url }}">
                 {% endfor %}
+            </div>
+            <div class="col-xs-6">
+                {{ good.bar_code }}<br>
 
-                <div>
-                    {% if good.min %}
-                    <a href="{% url 'cost_view' good.min.id %}" class="min-price">
-                        {{ good.min.shop.title }}
+                {% if good.min %}
+                    <a href="{% url 'good_view' good.min.good.id %}" class="min-price">
                         {{ good.min.unit_cost_str }}р/{{ good.unit.title }}
-                        {% if good.packed %}{{ good.min.pack_cost_str }}р/уп{% endif %}
-                    </a>
+                        {% if good.packed %}{{ good.min.pack_cost_str }}р/уп{% endif %}</a>
+                    {{ good.min.shop.title }}
                     -
-                    <a href="{% url 'cost_view' good.max.id %}" class="max-price">
-                        {{ good.max.shop.title }}
+                    <a href="{% url 'good_view' good.max.good.id %}" class="min-price">
                         {{ good.max.unit_cost_str }}р/{{ good.unit.title }}
-                        {% if good.packed %}{{ good.max.pack_cost_str }}р/уп{% endif %}
-                    </a>
-                    {% endif %}
-                </div>
-
+                        {% if good.packed %}{{ good.max.pack_cost_str }}р/уп{% endif %}</a>
+                    {{ good.max.shop.title }}
+                {% endif %}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
                 {% if children %}
                     <table class="table table-striped">
                     <tr>
@@ -60,17 +61,15 @@
 
                         {% if child.min %}
                         <td>
-                            <a href="{% url 'cost_view' child.min.id %}" class="min-price">
-                                {{ child.min.unit_cost_str }}р/{{ child.unit.title }}
-                                {% if child.packed %}{{ child.min.pack_cost_str }}р/уп{% endif %}
-                            </a><br>
+                            {{ child.min.unit_cost_str }}р/{{ child.unit.title }}
+                            {% if child.packed %}{{ child.min.pack_cost_str }}р/уп{% endif %}
+                            <br>
                             {{ child.min.shop.title }}
                         </td>
                         <td>
-                            <a href="{% url 'cost_view' child.min.id %}" class="min-price">
-                                {{ child.max.unit_cost_str }}р/{{ child.unit.title }}
-                                {% if child.packed %}{{ child.max.pack_cost_str }}р/уп{% endif %}
-                            </a><br>
+                            {{ child.max.unit_cost_str }}р/{{ child.unit.title }}
+                            {% if child.packed %}{{ child.max.pack_cost_str }}р/уп{% endif %}
+                            <br>
                             {{ child.max.shop.title }}
                         </td>
                         {% else %}

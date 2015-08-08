@@ -8,7 +8,7 @@
             {% for sale in sales %}
                 <li class="list-group-item">
                     <span class="text-muted small">{{ sale.timestamp|date }}</span>
-                    <a href="{% url 'goods_view' sale.good.id %}">{{ sale.good.title }}</a>
+                    <a href="{% url 'good_view' sale.good.id %}">{{ sale.good.title }}</a>
                     {{ sale.cost }}/{{ sale.amount }}
                 </li>
             {% endfor %}
