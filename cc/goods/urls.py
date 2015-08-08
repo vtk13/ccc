@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^shops/add$', views.ShopAdd.as_view(), name='shop_add'),
     url(r'^sales/list$', views.sales_list, name='sales_list'),
     url(r'^sales/add$', views.CostAdd.as_view(), name='sale_add'),
+    url(r'^costs/view/(?P<cost_id>[0-9]+)$', views.cost_view, name='cost_view'),
     url(r'^ajax/goods/(?P<query>.*)$', views.ajax_goods, name='ajax_goods'),
     url(r'^ajax/shops/(?P<query>.*)$', views.ajax_shops, name='ajax_shops'),
 ]

@@ -10,7 +10,17 @@
                 <a href="/goods/view/{{ parent.id }}">{{ parent.title }}</a> /
             {% endfor %}
         </div>
-        <h1>{{ good.title }} <a class="pull-right" href="/goods/edit/{{ good.id }}"><span class="glyphicon glyphicon-edit"></span></a></h1>
+
+        {% if not children %}
+            <form action="/sales/add" method="post" class="pull-right">
+                {% csrf_token %}
+                <input type="hidden" name="good" value="{{ good.id }}">
+                <input type="hidden" name="amount" value="1">
+                <button class="btn btn-success" type="submit">Купил сегодня</button>
+            </form>
+        {% endif %}
+        <a class="pull-right" href="/goods/edit/{{ good.id }}"><span class="glyphicon glyphicon-edit"></span></a>
+        <h1>{{ good.title }}</h1>
         <div class="row">
             <div class="col-xs-12">
                 {{ good.bar_code }}
@@ -19,49 +29,64 @@
                 {% endfor %}
 
                 <div>
-                    Минимальная цена:
-                    {{ good.min.shop.title }}
-                    {% if good.packed %}{{ good.min.pack_cost_str }}р/уп{% endif %}
-                    {{ good.min.unit_cost_str }}р/{{ good.unit.title }}
-                </div>
-
-                <div>
-                    Максимальная цена:
-                    {{ good.max.shop.title }}
-                    {% if good.packed %}{{ good.max.pack_cost_str }}р/уп{% endif %}
-                    {{ good.max.unit_cost_str }}р/{{ good.unit.title }}
+                    {% if good.min %}
+                    <a href="{% url 'cost_view' good.min.id %}" class="min-price">
+                        {{ good.min.shop.title }}
+                        {{ good.min.unit_cost_str }}р/{{ good.unit.title }}
+                        {% if good.packed %}{{ good.min.pack_cost_str }}р/уп{% endif %}
+                    </a>
+                    -
+                    <a href="{% url 'cost_view' good.max.id %}" class="max-price">
+                        {{ good.max.shop.title }}
+                        {{ good.max.unit_cost_str }}р/{{ good.unit.title }}
+                        {% if good.packed %}{{ good.max.pack_cost_str }}р/уп{% endif %}
+                    </a>
+                    {% endif %}
                 </div>
 
                 {% if children %}
-                    <ul class="list-group">
+                    <table class="table table-striped">
+                    <tr>
+                        <th>Продукт</th>
+                        <th>Минимальная цена</th>
+                        <th>Максимальная цена</th>
+                    </tr>
                     {% for child in children %}
-                        <li class="list-group-item">
-                            {{ child.bar_code }} <a href="/goods/view/{{ child.id }}">{{ child.title }}</a>
+                    <tr>
+                        <td>
+                            {{ child.bar_code }}<br>
+                            <a href="/goods/view/{{ child.id }}">{{ child.title }}</a>
+                        </td>
 
-                            <div>
-                                Минимальная цена:
-                                {{ child.min.shop.title }}
-                                {% if child.packed %}{{ child.min.pack_cost_str }}р/уп{% endif %}
+                        {% if child.min %}
+                        <td>
+                            <a href="{% url 'cost_view' child.min.id %}" class="min-price">
                                 {{ child.min.unit_cost_str }}р/{{ child.unit.title }}
-                            </div>
-
-                            <div>
-                                Максимальная цена:
-                                {{ child.max.shop.title }}
-                                {% if child.packed %}{{ child.max.pack_cost_str }}р/уп{% endif %}
+                                {% if child.packed %}{{ child.min.pack_cost_str }}р/уп{% endif %}
+                            </a><br>
+                            {{ child.min.shop.title }}
+                        </td>
+                        <td>
+                            <a href="{% url 'cost_view' child.min.id %}" class="min-price">
                                 {{ child.max.unit_cost_str }}р/{{ child.unit.title }}
-                            </div>
-                        </li>
+                                {% if child.packed %}{{ child.max.pack_cost_str }}р/уп{% endif %}
+                            </a><br>
+                            {{ child.max.shop.title }}
+                        </td>
+                        {% else %}
+                        <td colspan="2">цены не известны</td>
+                        {% endif %}
+                    </tr>
                     {% endfor %}
-                    </ul>
+                    </table>
                 {% else %}
                     <h2>Цены</h2>
                     <div class="list-group">
                     {% for cost in costs %}
                         <div class="list-group-item">
                             {{ cost.shop.title }}
-                            {% if good.packed %}{{ cost.pack_cost_str }}р/уп{% endif %}
                             {{ cost.unit_cost_str }}р/{{ good.unit.title }}
+                            {% if good.packed %}{{ cost.pack_cost_str }}р/уп{% endif %}
                             <span title="{{ cost.timestamp|date }}" class="pull-right glyphicon glyphicon-time"></span>
                         </div>
                     {% endfor %}

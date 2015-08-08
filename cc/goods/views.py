@@ -87,6 +87,15 @@ def goods_view(request, good_id):
     })
     return HttpResponse(template.render(context))
 
+def cost_view(request, cost_id):
+    cost = Cost.objects.get(pk=cost_id)
+
+    template = loader.get_template('costs/view.html')
+    context = RequestContext(request, {
+        'cost': cost
+    })
+    return HttpResponse(template.render(context))
+
 def shops_list(request):
     shops = Shop.objects.all()
     template = loader.get_template('shops/list.html')
